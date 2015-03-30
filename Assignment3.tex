@@ -74,24 +74,66 @@
 \maketitle
 \section*{Question 1}
 \subsection*{A)}
-
+In the 4-neighbor spin glass model the maximal cliques were the edges between
+each pixel. In an 8-neighbor spin glass model the maximal cliques become
+clusters of 4 pixels.
 \subsection*{B)}
 
 \subsection*{C)}
 
 \section*{Question 2}
-
+As dimension are reduced from 250 the reconstruction error is initially quite
+small but becomes exponentially more important as dimensions approach 0. The
+shoulder of the reconstruction error line is at a dimension of approximately X.
+From this we can conclude that X features are necessary to model the relationship
+between the features and the target in this dataset.
 \section*{Question 3}
 \subsection*{A)}
+As with standard Hidden Markov Models, Coupled Hidden Markov models will
+have three categories of parameters. These are the initial probabilities, the
+transition probabilites and the emission probabilities. Given the system
+depicted in Figure 1 of assignment 3:\\
+
+Initial Probabilities:
 \begin{equation}
-    P(y_i, z_i | s_i, y_i)P(s_i, y_i | s_j, y_j)
+  P(s0)
 \end{equation}
+\begin{equation}
+  P(u0)
+\end{equation}\\
+
+Transition Probabilities:
+\begin{equation}
+  P(s_i | s_{i-1}, u_{i-1})
+\end{equation}
+\begin{equation}
+  P(u_i | u_{i-1}, s_{i-1})
+\end{equation}\\
+
+Emission Probabilities:
+\begin{equation}
+  P(y_i | s_i)
+\end{equation}
+\begin{equation}
+  P(z_i | u_i)
+\end{equation}
+
 \subsection*{B)}
 
 \subsection*{C)}
 
 \subsection*{D)}
+The algorithm will remain largely the same except in the definition of the model
+parameters. More specifically, the initial and transition probabilities will need
+to be altered. K initial probabilities will be required and transition probabilities
+would be defined as follows in the current model context:
 
+\begin{equation}
+  P(s_i | s_{i-k}, u_{i-k})
+\end{equation}
+\begin{equation}
+  P(u_i | u_{i-k}, s_{i-k})
+\end{equation}
 \subsection*{E)}
 
 \end{document}
