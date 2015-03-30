@@ -76,17 +76,39 @@
 \subsection*{A)}
 In the 4-neighbor spin glass model the maximal cliques were the edges between
 each pixel. In an 8-neighbor spin glass model the maximal cliques become
-clusters of 4 pixels.
-\subsection*{B)}
+clusters of 4 pixels. As such, parametization for a 4 neighbor spin glass model
+will be as follows:
 
+\begin{center}
+\includegraphics[width=125pt, keepaspectratio=true]{ising_model_4n.jpg}\\
+\end{center}
+\begin{equation}
+  P(E) = \psi (B,E) \psi (D,E) \psi (E,F) \psi (E,H)
+\end{equation}
+While the parameters for an 8 neighbor spin glass model will be as such:
+\begin{center}
+\includegraphics[width=125pt, keepaspectratio=true]{ising_model_8n.jpg}\\
+\end{center}
+\begin{equation}
+  P(E) = \psi (A,B,D,E) \psi (B,C,E,F) \psi (D,E,G,H) \psi (E,F,H,I)
+\end{equation}
+
+\subsection*{B)}
+The advantages and disadvantages would be related to a trade off between
+model precision and computation time.
 \subsection*{C)}
 
 \section*{Question 2}
-As dimension are reduced from 250 the reconstruction error is initially quite
-small but becomes exponentially more important as dimensions approach 0. The
-shoulder of the reconstruction error line is at a dimension of approximately X.
-From this we can conclude that X features are necessary to model the relationship
-between the features and the target in this dataset.
+\begin{center}
+\includegraphics[width=250pt, keepaspectratio=true]{reconstruction_error.jpg}\\
+\end{center}
+As dimensions are reduced from 250 the reconstruction error is initially quite
+small but becomes more important as dimensions approach 0. The
+shoulder of the reconstruction error line is at a dimension of approximately 25.\\
+
+From this, we can conclude that given this input space we can use PCA to
+reduce dimensionality of the data to 25 in order to make computation more manageable
+without losing very much granularity in the feature data.
 \section*{Question 3}
 \subsection*{A)}
 As with standard Hidden Markov Models, Coupled Hidden Markov models will
@@ -119,6 +141,8 @@ Emission Probabilities:
 \end{equation}
 
 \subsection*{B)}
+In order to compute the joint probability of a sequence of observations a
+forward algorithm will need to be derived.
 
 \subsection*{C)}
 
