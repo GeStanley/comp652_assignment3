@@ -74,37 +74,56 @@
 \maketitle
 \section*{Question 1}
 \subsection*{A)}
-In the 4-neighbor spin glass model the maximal cliques were the edges between
-each pixel. In an 8-neighbor spin glass model the maximal cliques become
-clusters of 4 pixels. As such, parametization for a 4 neighbor spin glass model
-will be as follows:
-
+In spin glass models the maximum likelihood is computed as the sum of the products
+of the maximal clique's energy for each node in the model.
+\begin{equation}
+  \log L(\psi | D) = \sum_{i=1}^N \log \frac{1}{Z} \prod_C \psi_C(x_C)
+\end{equation}
+In a 4-neighbor spin glass model the maximal cliques were the edges between
+each pixel. As illustrated below:
 \begin{center}
-\includegraphics[width=125pt, keepaspectratio=true]{ising_model_4n.jpg}\\
+  \includegraphics[width=125pt, keepaspectratio=true]{ising_model_4n.jpg}\\
 \end{center}
 \begin{equation}
-  P(E) = \psi (B,E) \psi (D,E) \psi (E,F) \psi (E,H)
+  P(E) = \psi (x, Y = \{B,E\}) \psi (x, Y = \{D,E\}) \psi (x, Y = \{E,F\}) \psi (x, Y = \{E,H\})
 \end{equation}
-While the parameters for an 8 neighbor spin glass model will be as such:
+In an 8-neighbor spin glass model the maximal cliques become
+clusters of 4 nodes. As such, the energy of a node will be computed as the
+product of 4 clusters of 4:
 \begin{center}
-\includegraphics[width=125pt, keepaspectratio=true]{ising_model_8n.jpg}\\
+  \includegraphics[width=125pt, keepaspectratio=true]{ising_model_8n.jpg}\\
 \end{center}
 \begin{equation}
-  P(E) = \psi (A,B,D,E) \psi (B,C,E,F) \psi (D,E,G,H) \psi (E,F,H,I)
+  P(E) = \psi (x, Y = \{A,B,D,E\}) \psi (x, Y = \{B,C,E,F\}) \psi (x, Y = \{D,E,G,H\}) \psi (x, Y = \{E,F,H,I\})
 \end{equation}
-
+The energy computation can remain the same however.
+\begin{equation}
+  \psi(x, Y) = \alpha x + \sum_{i} \beta_{i} y_i x
+\end{equation}
+Where $i$ ranges from $0$ to $7$ for the 8 neighbors of a particular node.
 \subsection*{B)}
 The advantages and disadvantages would be related to a trade off between
 model precision and computation time.\\
 
 Given a 4 neighbor model computation time will be smaller given 20 fewer edge
-energy to be computed. However, the is at the expense of model accuracy. With
-the 8 neighbor model more data will be used to infer the value a pixel and
-as such would be more flexible. Which should improve the models accuracy.\\
+energies to be computed. However, this is at the expense of model accuracy. With
+the 8 neighbor model more data will be used to infer the value of a pixel as well
+as being more flixible due to using information coming from 4 new angles. \\
 
-In particular, with an 8 neighbor model would be able to model an image that contain
-circular shapes or curved lines.
+This should improve the models accuracy. In particular, when working with an image
+that contains circular shapes or curved lines.
 \subsection*{C)}
+A gibbs sampling algorithm in this situation, where evidence is injected along
+the left most edge, would require two passes. The first, would be a forward pass
+using only two of the four neighbor pixels. In the case of the first column, it
+will use the injected pixel to the left as well as the last infered pixel. Subsequent
+columns would use the two previous infered pixels.\\
+
+The second would be a backward pass and would use all four pixels. It would start
+from the bottom and works it's way back to the initially infered pixel. This would
+ensure that all pixels were estimated given the probability distribution of it's four
+neighbors.
+
 
 \section*{Question 2}
 \begin{center}
