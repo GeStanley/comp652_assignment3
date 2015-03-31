@@ -148,46 +148,94 @@ Emission Probabilities:
 In order to compute the joint probability of a sequence of observations a
 forward algorithm will need to be derived.
 
-
 \begin{equation}
   \begin{aligned}
   \alpha_t(s_t, u_t) & = P(s_t, u_t, y_{0:T}, x_{0:T})\\
-   & = \sum_{t-1 = 0}^T p(s_t, s_{t-1}, u_t, u_{t-1}, y_{1:T}, x_{1:T})\\
-   & = \sum_{t-1 = 0}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}, u_{t-1}) p(u_t | s_{t-1}, u_{t-1}) p(s_{t-1}, u_{t-1}, y_{1:T-1}, x_{1:T-1})\\
-   & = \sum_{t-1 = 0}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}, u_{t-1}) p(u_t | s_{t-1}, u_{t-1}) \alpha_{t-1}(y_{t-1}, x_{t-1})
+   & = \sum_{t = 1}^T p(s_t, s_{t-1}, u_t, u_{t-1}, y_{1:T}, x_{1:T})\\
+   & = \sum_{t = 1}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}, u_{t-1}) p(u_t | s_{t-1}, u_{t-1}) p(s_{t-1}, u_{t-1}, y_{1:T-1}, x_{1:T-1})\\
+   & = \sum_{t = 1}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}, u_{t-1}) p(u_t | s_{t-1}, u_{t-1}) \alpha_{t-1}(y_{t-1}, x_{t-1})
   \end{aligned}
 \end{equation}
+Because the equation listed above does not contain the initial probability we
+need to compute it seperately:
 \begin{equation}
   \alpha_0 (s_0, u_0) = p(y_0, z_0, s_0, u_0) = p(s_0) p(y_0 | s_0) p(u_0) p(z_0 | u_0)
 \end{equation}
-
-\subsection*{C)}
-
+Summing the equations above we obtain the joint probability:
 \begin{equation}
-  \begin{aligned}
-    \beta_k(s_k, u_k) & = p(y_{k+1:n} | s_k, u_k) p(z_{k+1:n} | s_k, u_k)\\
-    & = \sum_{z_{k+1=1}}^m p(y_{k+1:n}, z_{k+1:n}, s_{k+1}, u_{k+1} | s_k, u_k)\\
-    & = \sum_{z_{k+1=1}}^m p(y_{k+2:n} | s_{k+1}, u_{k+1}) p(z_{k+2:n} | s_{k+1}, u_{k+1}) p(y_{k+1} | s_{k+1}) p(z_{k+1} | u_{k+1}) p(s_{k+1} | s_k, u_k) p(u_{k+1} | s_k, u_k)\\
-    & = \sum_{z_{k+1=1}}^m \beta_{k+1}(s_{k+1}, u_{k+1}) p(y_{k+1} | s_{k+1}) p(z_{k+1} | u_{k+1}) p(s_{k+1} | s_k, u_k) p(u_{k+1} | s_k, u_k)
-  \end{aligned}
+  p(y_0, z_0, y_1, z_1, ... , y_T, z_T) = \sum_{i=0}^T \alpha_i(s_i, u_i)
 \end{equation}
 
+\subsection*{C)}
+The forward-backward algorithm is equal to the product between the forward and the
+backward algorithm. In the previous question I derived the forward algorithm. So,
+what is remaining is to derive the backward algorithm:
 \begin{equation}
-  \beta_n (s_n, u_n) = 1
+  \begin{aligned}
+    \beta_t(s_t, u_t) & = p(y_{t+1:n} | s_t, u_t) p(z_{t+1:n} | s_t, u_t)\\
+    & = \sum_{k=0}^{T-1} p(y_{t+1:n}, z_{t+1:n}, s_{t+1}, u_{t+1} | s_t, u_t)\\
+    & = \sum_{k=0}^{T-1} p(y_{t+2:n} | s_{t+1}, u_{t+1}) p(z_{t+2:n} | s_{t+1}, u_{t+1}) p(y_{t+1} | s_{t+1}) p(z_{t+1} | u_{t+1}) p(s_{t+1} | s_t, u_t) p(u_{t+1} | s_t, u_t)\\
+    & = \sum_{k=0}^{T-1} \beta_{t+1}(s_{t+1}, u_{t+1}) p(y_{t+1} | s_{t+1}) p(z_{t+1} | u_{t+1}) p(s_{t+1} | s_t, u_t) p(u_{t+1} | s_t, u_t)
+  \end{aligned}
+\end{equation}
+The probability at time T will be equal to 1 :
+\begin{equation}
+  \beta_T (s_T, u_T) = 1
+\end{equation}
+Summing the equations above we obtain te backward algorithm:
+\begin{equation}
+p(y_{t+1:n} | s_t, u_t) p(z_{t+1:n} | s_t, u_t) = \sum_{i=0}^{T} \beta_i(s_i, u_i)
+\end{equation}
+We can now derive the forward-backward algorithm as the product between the forward
+and the backward algorithm:
+\begin{equation}
+p(s_t, u_t | y_{0:T}, x_{0:T}) = \left(\sum_{i=0}^T \alpha_i(s_i, u_i)\right)\left( \sum_{i=0}^{T} \beta_i(s_i, u_i)\right)
 \end{equation}
 
 \subsection*{D)}
-The algorithm will remain largely the same except in the definition of the model
-parameters. More specifically, the initial and transition probabilities will need
-to be altered. K initial probabilities will be required and transition probabilities
-would be defined as follows in the current model context:
+The transition probabilities as well as the inference algorithms used will be
+conditional on whether $t\mod{k}=0$. More precisely, for transition probabilities:
 
 \begin{equation}
-  P(s_i | s_{i-k}, u_{i-k})
+  \left\{
+  \begin{array}{l l}
+    P(s_i | s_{i-1}, u_{i-1}) & \quad \text{if } i \mod k = 0 \\
+    P(s_i | s_{i-1}) & \quad \text{otherwise}
+
+  \end{array} \right.
 \end{equation}
+
 \begin{equation}
-  P(u_i | u_{i-k}, s_{i-k})
-\end{equation}
+  \left\{
+  \begin{array}{l l}
+    P(u_i | u_{i-1}, s_{i-1}) & \quad \text{if } i \mod k = 0 \\
+    P(u_i | u_{i-1}) & \quad \text{otherwise}
+
+  \end{array} \right.
+\end{equation}\\
+And the computation for the inference algorithms will be similar. For the forward
+algorithm:
+\begin{equation}
+  \left\{
+  \begin{array}{l l}
+  \sum_{t = 1}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}, u_{t-1}) p(u_t | s_{t-1}, u_{t-1}) \alpha_{t-1}(y_{t-1}, x_{t-1}) & \quad \text{if } t \mod k = 0 \\
+  \sum_{t = 1}^T p(y_t | s_t) p(x_t | u_t) p(s_t | s_{t-1}) p(u_t | u_{t-1}) \alpha_{t-1}(y_{t-1}, x_{t-1}) & \quad \text{otherwise}
+
+  \end{array} \right.
+\end{equation}\\
+And for the backward algorithm:
+\begin{equation}
+  \left\{
+  \begin{array}{l l}
+  \sum_{t=0}^{T-1} \beta_{t+1}(s_{t+1}, u_{t+1}) p(y_{t+1} | s_{t+1}) p(z_{t+1} | u_{t+1}) p(s_{t+1} | s_t, u_t) p(u_{t+1} | s_t, u_t) & \quad \text{if } i \mod k = 0 \\
+  \sum_{t=0}^{T-1} \beta_{t+1}(s_{t+1}, u_{t+1}) p(y_{t+1} | s_{t+1}) p(z_{t+1} | u_{t+1}) p(s_{t+1} | s_t) p(u_{t+1} | u_t) & \quad \text{otherwise}
+
+  \end{array} \right.
+\end{equation}\\
 \subsection*{E)}
+The object of the learning algorithm should be to find the K whose joint probability
+is the greatest. As such, for each K in the the range 0 to n The joint probability
+will have to be calculated. Once this is done, the K whose joint probability is the
+higest should be used as the most accurate model.
 
 \end{document}
