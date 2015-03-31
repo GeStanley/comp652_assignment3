@@ -15,7 +15,8 @@
 \usepackage{graphicx}
 \usepackage[english]{babel}
 \usepackage{tikz}
-\usepackage[]{algorithm2e}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 % In case you need to adjust margins:
 \topmargin=-0.45in      %
 \evensidemargin=0in     %
@@ -122,8 +123,44 @@ columns would use the two previous infered pixels.\\
 The second would be a backward pass and would use all four pixels. It would start
 from the bottom and works it's way back to the initially infered pixel. This would
 ensure that all pixels were estimated given the probability distribution of it's four
-neighbors.
+neighbors.\\
 
+In the first pass the color of the pixel will be set based on the color with the
+highest probability, but only using the pixel to the left and the previously determined
+pixel color. For each color the probability will be calculated as follows:
+\begin{equation}
+  P(x_{ij} | x_{i-1, j}, x_{i, j-1})
+\end{equation}
+Where $i$ is the row and $j$ is the column of a particular pixel. The pixel will be
+set to the color with the highest probability.\\
+
+In the second pass the color of the pixel will be set based on the color with the
+highest probability:
+\begin{equation}
+  P(x_i | MarkovBlanket(x_i))
+\end{equation}
+Where $i$ is an individual pixel in the model.
+
+\begin{algorithm}
+  \caption{Gibb’s Sampling algorithm}
+  \begin{algorithmic}[1]
+    \Procedure{GibbsSample}{$pixelMatrix$}
+      \State $rows\gets pixelMatrix.rows()$
+      \State $cols\gets pixelMatrix.columns()$
+      \Comment{<text>}
+      \For{\text{i in range 0 to rows}}
+
+        \For{\text{c in range 1 to cols}}
+          \For{\text{all possible columns}}
+
+
+          \EndFor
+        \EndFor
+      \EndFor
+      \State \textbf{return} $b$
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 \section*{Question 2}
 \begin{center}
