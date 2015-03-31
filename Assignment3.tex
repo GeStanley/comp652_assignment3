@@ -97,9 +97,13 @@ While the parameters for an 8 neighbor spin glass model will be as such:
 The advantages and disadvantages would be related to a trade off between
 model precision and computation time.\\
 
-With the 8 neighbor model more data will be used to infer the value a pixel, this
-could improve the models accuracy.This is at the expense of having to perform
-more calculations as well as increasing the potential of overfitting the model.
+Given a 4 neighbor model computation time will be smaller given 20 fewer edge
+energy to be computed. However, the is at the expense of model accuracy. With
+the 8 neighbor model more data will be used to infer the value a pixel and
+as such would be more flexible. Which should improve the models accuracy.\\
+
+In particular, with an 8 neighbor model would be able to model an image that contain
+circular shapes or curved lines.
 \subsection*{C)}
 
 \section*{Question 2}
@@ -233,9 +237,9 @@ And for the backward algorithm:
   \end{array} \right.
 \end{equation}\\
 \subsection*{E)}
-The object of the learning algorithm should be to find the K whose joint probability
+The object of the learning algorithm should be to find the $K$ whose joint probability
 is the greatest. As such, for each $K$ in the the range $0$ to $n$ the joint probability
-will have to be calculated. Once this is done, the K whose joint probability is the
-higest should be used as the most accurate model.
+will have to be calculated. Once this is done, the $K$ whose joint probability is the
+greatest should be used as the most accurate model.
 
 \end{document}
